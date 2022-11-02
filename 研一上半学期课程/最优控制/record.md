@@ -1,6 +1,16 @@
 # $\color{red}\text{Optimal Control of Switched System}$ 
 
-## Equivalent Problem Formulation
+## Switched System
+$$
+\dot{x} = f_{i}(x,u)
+$$
+switching sequence:
+$$
+\sigma = ((t_{0},i_{0}),(t_{1},i_{1}),\dots,(t_{K},i_{K}))
+$$
+
+
+## Optimal Control Problem
 
 ## ==Problem 1==
 Given:
@@ -52,8 +62,22 @@ Such that following conditions:
 solve the constrained nonlinear optimization problem
 $$
     min_{\tilde{t}} J_{1}(\hat{t}) \\ 
-    \text{subject to }\tilde{t} \in T
+    \text{subject to }\hat{t} \in T
 $$
+
+Algorithm:  
+1. Set the iteration index $j=0$.Choose an initial $\tilde{t}^{j}$.
+2. By solving an optimal control problem .
+3. Find $\frac{\partial J_{1}}{\partial \hat{t}}(\tilde{t}^{j})$ and $\frac{\partial^{2} J_{1}}{\partial \hat{t}^{2}}(\tilde{t}^{j})$.
+4. Use some feasible direction method to update $\tilde{t}^{j} $ to $\tilde{t}^{j+1} $.
+5. Repeat step(2),(3),(4),(5).
+
+
+
+
+
+
+
 
 ## ==Problem 2==
 Given:
@@ -158,9 +182,86 @@ Apply Theorem 1 to Problem 3:
 J(x_{n+1}) = \varPsi(x(2,x_{n+1})) + \int_{0}^{1}\tilde{L}(x,u,x_{n+1})d\tau + \int_{1}^{2}\tilde{L}(x,u,x_{n+1})d\tau
 $$
 
-differentiating above function with respect to $x_{n+1}$
+differentiating above function with respect to $x_{n+1}$.$(33)-(39)$
 
 
+---
+
+
+
+## ==Problem 4==General Switched Linear Quadratic Problem 
+Given:
+* a switched system $$
+\dot{x} = A_{1}x + B_{1}u,t_{0} \le t \le t_{1}
+$$
+$$
+\dot{x} = A_{2}x + B_{2}u,t_{1} \le t \le t_{f}
+$$
+
+find a switching instant t_{1} and a continous input u
+
+such that:
+* minimize cost functional $$
+J = \underbrace{\frac{1}{2}x(t_{f})^{T}Q_{f}x(t_{f})+M_{f}x(t_{f})+W_{f})}_{\varPsi} + \int_{t_{0}}^{t_{f}}\underbrace{(\frac{1}{2}x^{T}Qx+x^{T}Vu+\frac{1}{2}u^{T}Ru +Mx +Nu+ W)}_{L(x,u)}dt
+$$
+
+## ==Problem 5==Equivalent GSLQ problem
+Given:
+* a system 
+
+in the interval $\tau \in [0,1)$ 
+$$
+\frac{dx(\tau)}{d\tau} = (x_{n+1}-t_{0})(A_{1}x+B_{1}u)
+$$
+$$
+\frac{dx_{n+1}}{d\tau} = 0
+$$
+
+in the interval $\tau \in [1,2]$ 
+$$
+\frac{dx(\tau)}{d\tau} = (t_{f}-x_{n+1})(A_{2}x+B_{2}u)
+$$
+$$
+\frac{dx_{n+1}}{d\tau} = 0
+$$
+
+find a $x_{n+1}$ and $u_{\tau}$
+such that:
+* minimize
+$$
+J = \underbrace{\frac{1}{2}x(2)^{T}Q_{f}x(2)+M_{f}x(2)+W_{f})}_{\varPsi} + \int_{0}^{1}(x_{n+1}-t_{0})L(x,u)d\tau + \int_{1}^{2}(t_{f} - x_{n+1})L(x,u)d\tau
+$$
+
+aassume:
+* the optimal value function 值函数:$$
+V^{*}(x,\tau,x_{n+1}) = \frac{1}{2}x^{T}P(\tau,x_{n+1})x + S(\tau,x_{n+1})x+T(\tau,x_{n+1})
+$$
+* 计算 ==HJB function==: 
+    * HJB计算公式
+    $$
+    -\frac{\partial V^{\star}}{\partial t}(x,t) = min_{u}\{F+\frac{\partial V^{\star}}{\partial t}f\}
+    $$
+
+    * in the interval $\tau \in [0,1]$
+$$
+-\frac{\partial V^{\star}}{\partial \tau}(x,\tau,x_{n+1}) = min_{u(\tau)}\{(x_{n+1}-t_{0})(L(x,u)+\frac{\partial V^{\star}}{\partial x}(x,\tau,x_{n+1})f_{1}(x,u))\}
+$$
+    * in the interval $\tau \in [1,2]$
+$$
+-\frac{\partial V^{\star}}{\partial \tau}(x,\tau,x_{n+1}) = min_{u(\tau)}\{(t_{f}-x_{n+1})(L(x,u)+\frac{\partial V^{\star}}{\partial x}(x,\tau,x_{n+1})f_{2}(x,u))\}
+$$
+
+the solution to the above HJB equation:$$
+u(x,\tau,x_{n+1}) = R^{-1}(B_{k}^{T}P(\tau,x_{n+1})+V^{T})x(\tau,x_{n+1})-R^{-1}(B_{k}^{T}S^{T}(\tau,x_{n+1})+N^{T})
+$$
+
+其中，$P,S,T$满足$(60)-(65)$式和代价函数(66),接着引入参数化方法计算对$x_{n+1}$的微分项$(67)-(73)$.最终再加上$(74)-(79)$的边界条件整体构成一个常微分方程组用 ***Runge-Kutta method*** 求解.
+
+Q.  
+什么是HJB function
+什么是the optimal value function 
+如何解HJB function
+P S T V N是什么？
 
 
 
@@ -168,7 +269,7 @@ differentiating above function with respect to $x_{n+1}$
 ## $ \color{blue} \text{Question}$
 1. 引入$x_{n+1}$参数化作用是什么?参数化方法是指什么方法?
 2. a two point boundary value DAE 是指$t_{0}$,$t_{f}$给定吗？
-3. 引入独立参数$\tau$的作用是什么?
+3. 引入独立参数$\tau$的作用是什么? 
 
 
 

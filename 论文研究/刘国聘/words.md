@@ -142,7 +142,8 @@ derivative 衍生物
 derive 获得，起源，衍生
 namely 即
 abbreviate 缩写
-
+intersect 交叉,相关联
+implicity 隐晦,含蓄
 
 
 
