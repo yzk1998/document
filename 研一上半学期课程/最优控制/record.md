@@ -17,12 +17,12 @@ Given:
 * subsystem $\dot{x}=f_{i}(x,u)$
 * a fixed time interval $[t_{0},t_{f}]$
 * a prespecified squence of active subsystems $\sigma = ((t_{0},i_{0}),(t_{1},i_{1}),\dots,(t_{K},i_{K}))$
+* $x(t_{0})=x_{0}$
+* meet $S_{f}$ at $t_{f}$
 
 find a continuous input $u \in U_{[t_{0},t_{f}]}$ and switching instants $t_{1},\dots ,t_{K}$
 
 such that 
-* $x(t_{0})=x_{0}$
-* meet $S_{f}$ at $t_{f}$
 * minimize cost function $$
 J = \varPsi(x(t_{f})) + \int_{t_{0}}^{t_{f}}L(x(t),u(t))dt
 $$
@@ -101,7 +101,7 @@ $$
 ***introduce*** a state variable $x_{n+1}$ corresponding to $t_{1}$.
 $x_{n+1}$ satisfy 
 $$
-\frac{x_{n+1}}{dt} = 0
+\frac{dx_{n+1}}{dt} = 0
 $$
 $$
 x_{n+1}(0) = t_{1}
@@ -198,7 +198,7 @@ $$
 \dot{x} = A_{2}x + B_{2}u,t_{1} \le t \le t_{f}
 $$
 
-find a switching instant t_{1} and a continous input u
+find a switching instant $t_{1}$ and a continous input u
 
 such that:
 * minimize cost functional $$

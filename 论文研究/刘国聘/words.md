@@ -76,35 +76,6 @@ simultaneously 同时的
 utilize 利用
 
 remainder 剩余部分
-
-
-$$
-\dot{x}(t) = f_{\sigma(t)}(x(t),u(t)) 
-$$
-
-$$
-\sigma(t):[0,+\infty) \rarr P=\{1,...,p\}
-$$
-
-$$
-\sigma(t)=i \in P
-$$
-
-$$
-f_{i}(x(t),u(t)):R^{n} \rarr R^{n}
-$$
-
-
-$$
-x(k+1) = f_{\sigma(k)}(x(k),u(k)),K \in Z_{+}
-$$
-
-
-$$
-\frac{\partial V(x)}{\partial x}f_{1}(x) \le -W(x),t \in P
-$$
-
-
 conventional 传统的
 invoke 援引 行使
 formula formulae
@@ -132,7 +103,8 @@ nontrivial 不凡的 重要的
 hinder 阻碍
 iteration 迭代
 feasible 可行的
-address v. 提出 陈述
+==address v. 提出 陈述==
+
 devise 设计 发明
 and vice versa 反之亦然
 in the sense that 从某种意义上来说
@@ -144,7 +116,12 @@ namely 即
 abbreviate 缩写
 intersect 交叉,相关联
 implicity 隐晦,含蓄
-
+objective 客观
+trivial 不重要的,琐碎的
+well-defined 定义明确的
+settling time 稳定时间
+therefore 因此
+suppose 假设
 
 
 
