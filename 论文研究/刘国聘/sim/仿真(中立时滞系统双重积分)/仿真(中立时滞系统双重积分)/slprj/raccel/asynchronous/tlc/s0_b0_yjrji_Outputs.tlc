@@ -1,0 +1,69 @@
+%implements s0_b0_yjrji_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+real_T (*lastU)[2];
+real_T lastTime;
+%closefile localVarDecl
+%assign tlcOutputsFcnOfS0B0 = OpaqueTLCBlockFcn("Outputs", 0, 0, 0, 2, 0)
+%assign tlcOutputsFcnOfS0B1 = OpaqueTLCBlockFcn("Outputs", 0, 1, 0, 2, 1)
+%assign tlcOutputsFcnOfS0B2 = OpaqueTLCBlockFcn("Outputs", 0, 2, 0, 2, 2)
+%assign tlcOutputsFcnOfS0B3 = OpaqueTLCBlockFcn("Outputs", 0, 3, 0, 2, 3)
+%assign tlcOutputsFcnOfS0B4 = OpaqueTLCBlockFcn("Outputs", 0, 4, 0, 2, 4)
+%assign tlcOutputsFcnOfS0B5 = OpaqueTLCBlockFcn("Outputs", 0, 5, 0, 2, 5)
+%assign tlcOutputsFcnOfS0B6 = OpaqueTLCBlockFcn("Outputs", 0, 6, 0, 2, 6)
+%assign tlcOutputsFcnOfS0B7 = OpaqueTLCBlockFcn("Outputs", 0, 7, 0, 2, 7)
+%<SLibGetRootInportsFromFile(system, TLC_FALSE)>
+%<SLibGenerateExtModeOutput(system)>
+%<tlcOutputsFcnOfS0B0>\
+if (%<(SLibCGIRIsSampleHit(1, 0))>) {
+%<tlcOutputsFcnOfS0B1>\
+}
+%<tlcOutputsFcnOfS0B2>\
+if ((rtDW.cvllmyuawn >= %<(SLibCG_SE(LibGetT()))>) && (rtDW.gea1nuybtz >= %<(SLibCG_SE(LibGetT()))>)) {
+    rtB.oq0z3rv2vr[0] = 0.0;
+    rtB.oq0z3rv2vr[1] = 0.0;
+} else {
+    lastTime = rtDW.cvllmyuawn;
+    lastU = &rtDW.b5ynwg1d03;
+    if (rtDW.cvllmyuawn < rtDW.gea1nuybtz) {
+        if (rtDW.gea1nuybtz < %<(SLibCG_SE(LibGetT()))>) {
+            lastTime = rtDW.gea1nuybtz;
+            lastU = &rtDW.mq503qndxa;
+        }
+    } else if (rtDW.cvllmyuawn >= %<(SLibCG_SE(LibGetT()))>) {
+        lastTime = rtDW.gea1nuybtz;
+        lastU = &rtDW.mq503qndxa;
+    }
+    lastTime = %<(SLibCG_SE(LibGetT()))> - lastTime;
+    rtB.oq0z3rv2vr[0] = (rtB.gol5w2fvki[0] - (*lastU)[0]) / lastTime;
+    rtB.oq0z3rv2vr[1] = (rtB.gol5w2fvki[1] - (*lastU)[1]) / lastTime;
+}
+rtB.bpymg14x15[0] = rtB.kwzrymogcx[0];
+rtB.bpymg14x15[2] = rtB.oq0z3rv2vr[0];
+rtB.bpymg14x15[1] = rtB.kwzrymogcx[1];
+rtB.bpymg14x15[3] = rtB.oq0z3rv2vr[1];
+%<tlcOutputsFcnOfS0B3>\
+if (%<(SLibCGIRIsSampleHit(1, 0))>) {
+%<tlcOutputsFcnOfS0B4>\
+%<tlcOutputsFcnOfS0B5>\
+%<tlcOutputsFcnOfS0B6>\
+%<tlcOutputsFcnOfS0B7>\
+}
+%<SLibInsertSolverResetCode()>\
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction
+%function OutputsFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Outputs0(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 2, fcnProtoType)>
+%endfunction

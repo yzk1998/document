@@ -1,0 +1,4 @@
+#ifndef RTW_HEADER_asynchronous_acc_types_h_
+#define RTW_HEADER_asynchronous_acc_types_h_
+typedef struct P_asynchronous_T_ P_asynchronous_T ;
+#endif

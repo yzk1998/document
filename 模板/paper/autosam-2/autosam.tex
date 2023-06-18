@@ -49,6 +49,7 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 
+
 \usepackage{caption}
 \usepackage[justification=centering]{caption}
 
@@ -131,7 +132,7 @@
 %\runtitle{Insert a suggested running title}  % Running title for regular 
                                               % papers but only if the title  
                                               % is over 5 words. Running title 
-                                              % is not shown in output.
+                                             % is not shown in output.
 
 \title{11111111\thanksref{footnoteinfo}} % Title, preferably not more 
                                                 % than 10 words.
@@ -227,8 +228,9 @@ Consider a neutral switched system described by the following equation:
     \end{aligned}
 \end{equation}
 
-where $x(t) \in R^{n}$ is the state,$u(t) \in R^{p}$ denote the system state and control input.$\sigma(t):[0,+\infty) \rightarrow \mathcal{P}$ 
-is a piecewise constant function denote switching signal. $h$ and $r$ are the state delay and neutral delay.
+Where $x(t) \in \mathbb{R}^{n}$,$u(t) \in \mathbb{R}^{p}$ denote the system states and control inputs.$\mathcal{P} := \left\{1,2,\dots N\right\}$, $N$ denots the number of subsystems.
+$\sigma(t):[0,+\infty) \rightarrow \mathcal{P}$ 
+is a piecewise constant function denoting switching signal;$h$ and $r$ are the state delay and neutral delay.
 $\Psi(\theta)$ is a initial vector function on $[-H,0]$.
 
 The Zeno and impulsive conditions are assumed to be excluded consideration.The switching sequence is expressed as 
@@ -238,7 +240,7 @@ The Zeno and impulsive conditions are assumed to be excluded consideration.The s
         & \qquad |\sigma(t_{k}) \in \mathcal{P},k = 0,1,\ldots\}
     \end{aligned}
 \end{equation}
-where $t_{0}$ is the initial time and  $t_{k}$ is the switching instant. The $\sigma(t_{k})$th subsystem is active when $t \in [t_{k},t_{k+1})$. 
+where $t_{0}$ is the initial time and  $t_{k}$ is the switching instants. The $\sigma(t_{k})$th subsystem is active when $t \in [t_{k},t_{k+1})$. 
 %For $i \in \{\mathcal{P},Ai, Bi, Ci, Di\}$ are known real constant matrices of appropriate dimensions.
 
 Considering the asynchronous switching, the candidate controller presented in the form of 
@@ -247,16 +249,35 @@ Considering the asynchronous switching, the candidate controller presented in th
         u(t) = K_{\sigma(t-\tau(t))}x(t)
     \end{aligned}
 \end{equation}
-where $\tau(t)$ Represents the switching delay satisfying $0 \textless \tau(t) \textless \tau_{d} \textless t_{k+1}-t_{k},\forall k \in \mathbb{N} $.
+where $\tau(t)$ represents the switching delay satisfying $0 \textless \tau(t) \textless \tau_{d} \textless t_{k+1}-t_{k},\forall k \in \mathbb{N} $.
 
-Operator
+\begin{defn}%[cite wangyibo 31]
+    The PI operator $\mathcal{P}\begin{bmatrix}
+        &P,&Q_{1}\\
+        &Q_{2},&\left\{R_{i}\right\}
+    \end{bmatrix} : \mathbb{R}^{m}\times L_{2}^{n}\left[-1,0\right] \rightarrow \mathbb{R}^{p}\times L_{2}^{q}\left[-1,0\right]$
+    satisfies the following condition:
+    \begin{equation} \label{e1}
+        \begin{aligned}
+            \left(\mathcal{P}\begin{bmatrix}
+                &P,&Q_{1}\\
+                &Q_{2},&\left\{R_{i}\right\}
+            \end{bmatrix}\right)\begin{bmatrix}
+                x\\
+                \psi
+            \end{bmatrix}(s):=\begin{bmatrix}
+                Px+\int_{-1}^{0}Q_{1}(s)\psi(s)ds\\
+                Q_{2}(s)x+\Xi(R_{i},\psi)
+            \end{bmatrix}
+        \end{aligned}
+    \end{equation}
+where $\Xi(R_{i},\psi) = R_{0}(s)\psi(s)+\int_{-1}^{s}R_{1}(s,\eta)\psi(\eta)d\eta+\int_{s}^{0}R_{2}(s,\eta)\psi(\eta)d\eta$ 
+and matrix $P \in \mathbb{R}^{p \times m}$, bounded polynomial funtions $Q_{1}(s) \in W_{2}^{p \times n}\left[-1,0\right]$,$Q_{2}(s) \in W_{2}^{q \times m}\left[-1,0\right]$, 
+$R_{0}(s) \in W_{2}^{q \times n}\left[-1,0\right]$, $R_{1}(s,\eta),R_{2}(s,\eta) \in W_{2}^{q \times n}\left[\left[-1,0\right]\times\left[-1,0\right]\right]$. 
+\end{defn}
 
-%算子运算说明
-%参考wangyibo
 
-
-
-If we also do not consider the output $y(t)$,we can convert Equation (1) to standard NDS(Neutral Delay System) (4) by Lemma (NDStoDDF)
+If we also do not consider the output $y(t)$,we can convert equation(1) to standard NDS(Neutral Delay System) (4) by Lemma (NDStoDDF)
 \begin{equation}
     \begin{aligned}
         \begin{bmatrix}
@@ -315,17 +336,21 @@ If we also do not consider the output $y(t)$,we can convert Equation (1) to stan
     \end{equation}
 \end{defn}
 
-\begin{defn}
-We divide the time interval into the mismatched period $\mathcal{M}_{1}$ and matched period $\mathcal{M}_{2}$.
+\begin{rmk}
+    In addition to representing the number of system switches up to time $t$, $N_{\sigma(t)}$ can also be understood as the last switch, which is helpful for understanding later theorems of this paper.
+\end{rmk}
 
-Let $\mathcal{P}_{m1}$ denote the index set systems during the mode-identifying period or mismatched period. Meanwhile, denote
-$\mathcal{P}_{m2}^{s}$, $\mathcal{P}_{m2}^{u} \in \mathcal{P}_{m2}$ as the stable and unstable indices sets during the normal-working period, respectively. Namely,
+
+\begin{defn}
+We divide the time interval into the mismatched period $m_{1}$ and matched period $m_{2}$.
+
+We define $\mathcal{P}_{m1}$ is Asynchronous Switching state. $\mathcal{P}_{m2}$ is Normal Operation state
 \begin{equation}
     \begin{aligned}
         \setlength{\arraycolsep}{0.9pt}
         &\mathcal{P}_{m1} = \{i \in \mathcal{P} | \sigma(t) = i,\\
         &\qquad \qquad \qquad \qquad  \forall t \in [t_{k},t_{k}+\tau(t_{k})),k = 0,1,\ldots\}\\
-        &\mathcal{P}_{m1} = \{i \in \mathcal{P} | \sigma(t) = i,\\
+        &\mathcal{P}_{m2} = \{i \in \mathcal{P} | \sigma(t) = i,\\
         &\qquad \qquad \qquad \qquad\forall t \in [t_{k}+\tau(t_{k},t_{k})),k = 0,1,\ldots\}
     \end{aligned}
 \end{equation}
@@ -334,19 +359,25 @@ Clearly, it holds that $\mathcal{P} = \mathcal{P}_{m1} = \mathcal{P}_{m2} = \mat
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.47\textwidth,height=0.168\textwidth]{2_1.png}
+    \includegraphics[width=0.49\textwidth,height=0.121\textwidth]{2_1.png}
     \caption{A S}
     \end{figure} 
 
 \begin{rmk}
-    reamrk1
+    $\mathcal{P}$, $\mathcal{P}_{m1}$, $\mathcal{P}_{m2}^{s}$, $\mathcal{P}_{m2}^{u}$
+    %读者可能第一次看到以上四个集合的时候会有些疑惑，因为从集合包含的元素上来讲以上四个集合是完全相同的，但是各自的意义是不相同的
+    %接下来我将截图时间轴对那四个集合的区别进行说明
+    %其中$\mathcal{P}$代表所有的子系统
+    %$\mathcal{P}_{m1}$代表处于异步切换阶段的子系统
+    %$\mathcal{P}_{m2}^{s}$代表处于正常运行阶段的稳定的子系统
+    %$\mathcal{P}_{m2}^{u}$代表处于正常运行阶段的不稳定的子系统
 \end{rmk}
 
 
 \begin{defn}
     
-    Define the kth holding time of a switching
-    signal $\sigma$ in the matched period as
+    Define the kth holding time of the switching
+    signal $\sigma(t)$ in the matched period as
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -436,7 +467,7 @@ To establish the main result of this paper, we review four useful lemmas that wi
 %lemma yibo wang
 \begin{lem}
     [c]For given time delays $\tau_{i}(i=0,1,\cdots N)$ the system $\mathcal{T}\dot{x}_{f}(t) = \mathcal{A}x_{f}(t)$ is asymptotically stable 
-    if there exsit a positive,self-adjoint PI operator $\mathcal{P}:=\mathcal{P}\begin{bmatrix}
+    if there exsits a positive, self-adjoint PI operator $\mathcal{P}:=\mathcal{P}\begin{bmatrix}
         P,&Q_{1}\\
         Q_{2},&\{R_{i}\}
     \end{bmatrix}$ such that the following inequality holds:
@@ -495,14 +526,16 @@ And then we try to (cite Representation of Networks and Systems with Delay:DDEs,
     \end{aligned}
 \end{equation}
 \end{lem}
-remark?
-It should be noticed the difference between $\bold{x}$ and $x$.
+\begin{rmk}
+    It should be noticed the difference between $\bold{x}$ and $x$.
 The reason why $\bold{x}$ terms and $x$ terms can be added up is that there is no difference
 for the operator $\mathcal{B}_{T_{2}}$ to dual with $\bold{x}$ and $x$.
+\end{rmk}
 
-remark
-$\mathcal{B}_{T_{2}}$,$B_{2}$ was minimalized by converting program in PIETOOLS2022.  
 
+\begin{rmk}
+    $\mathcal{B}_{T_{2}}$,$B_{2}$ was minimalized by converting program in PIETOOLS2022.  
+\end{rmk}
 
 
 
@@ -686,7 +719,7 @@ And then (cite Representation of Networks and Systems with Delay:DDEs, DDFs, ODE
 Cite Delay-Dependent Stability for Load FrequencyControl System via Linear Operator Inequality 
 
 \begin{thm}
-For given time delays $r,h$ and controller $u = \mathcal{K}\mathcal{x}(t)$,the neutral system (1) is asymptotically stable if there exsit a positive, self-adjoint PI operator $\mathcal{H}:=\mathcal{H}\begin{bmatrix}
+For given time delays $r,h$ and controller $u = \mathcal{K}\bold{x}(t)$,the neutral system (1) is asymptotically stable if there exsit a positive, self-adjoint PI operator $\mathcal{H}:=\mathcal{H}\begin{bmatrix}
     P & Q_{1}\\
     Q_{2} & \{R_{i}\}
 \end{bmatrix}$ such that the following inequality
@@ -708,21 +741,32 @@ where
 \end{thm}
 
 \begin{pf}
-    \begin{equation}
+%    \begin{equation}
+%        \begin{aligned}
+%            \setlength{\arraycolsep}{0.9pt}
+%            u(t) = K\bold{x(t)}
+%        \end{aligned}
+%    \end{equation}
+%    \begin{equation}
+%       \begin{aligned}
+%            \setlength{\arraycolsep}{0.9pt}
+%            \bold{x(t)} := \begin{bmatrix}
+%                x(t) \\
+%                \Phi(t,.)
+%            \end{bmatrix}\nonumber
+%       \end{aligned}
+%    \end{equation}
+
+    We define a operator $\mathcal{K} = \mathcal{P}\begin{bmatrix}
+        K,&0\\
+        0,&\left\{0\right\}
+    \end{bmatrix}$, then the controller (3) becomes:
+    \begin{equation} \label{e1}
         \begin{aligned}
-            \setlength{\arraycolsep}{0.9pt}
-            u(t) = K\bold{x(t)}
+            u(t) = \mathcal{K}_{\sigma(t-\tau(t))}\bold{x}(t)
         \end{aligned}
     \end{equation}
-    \begin{equation}
-        \begin{aligned}
-            \setlength{\arraycolsep}{0.9pt}
-            \bold{x(t)} := \begin{bmatrix}
-                x(t) \\
-                \Phi(t,.)
-            \end{bmatrix}\nonumber
-        \end{aligned}
-    \end{equation}
+    
     then we got the standard PIE form 
     \begin{equation}
         \begin{aligned}
@@ -769,26 +813,18 @@ where
 remark?
 The procedures for calculating the delay margin are provided as follows.?
 
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-
-
 
 
 
 \begin{thm}
-Given the controller under asynchronous switching:
-\begin{equation}
-    u(t) = \mathcal{K}_{\sigma(t-\tau(t))}\bold{x}(t)
-\end{equation}
+%Given the controller under asynchronous switching:
+%\begin{equation}
+%    u(t) = \mathcal{K}_{\sigma(t-\tau(t))}\bold{x}(t)
+%\end{equation}
 
-Let $\alpha_{i},\beta_{i}$ be given constants. The neutral switched system(1) is global asymptotic stablility if ther exists positive, self-adjoint PI operators $\mathcal{H}_{i}$, let following PI operator $\mathcal{M}_{i},\mathcal{N}_{i}$satisfies:
+Let $\alpha_{i},\beta_{i}$ be given constants. The neutral switched system(1) is global asymptotic stablility if there exist positive, self-adjoint PI operators $\mathcal{H}_{i}$, such that PI operators $\mathcal{M}_{i},\mathcal{N}_{i}$ satisfy:
 
-In the stage of stable normal operation, $i \in \mathcal{P}_{m2}^{s},\alpha_{i} \textgreater 0$, and in the stage of unstable normal operation,  $i \in \mathcal{P}_{m2}^{u},\alpha_{i} \textless 0$
+In the normal operation state, $i \in \mathcal{P}_{m2}^{s},\alpha_{i} \textgreater 0$ and $i \in \mathcal{P}_{m2}^{u},\alpha_{i} \textless 0$
 \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -797,7 +833,7 @@ In the stage of stable normal operation, $i \in \mathcal{P}_{m2}^{s},\alpha_{i} 
     \end{equation}
     Where $\tilde{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{i}\mathcal{B}_{T_{2}i}$, $\tilde{\mathcal{A}}_{i} = \mathcal{A}_{i}+\mathcal{K}_{i}\mathcal{B}_{2i}$. 
     
-In the stage of asynchronous switching,  $i \in \mathcal{P}_{m1},\beta_{i} \textgreater 0$. For any $j\in\mathcal{P}_{m2},i \ne j$
+In the asynchronous switching state,  $i \in \mathcal{P}_{m1},\beta_{i} \textgreater 0$. For any $j\in\mathcal{P}_{m2},i \ne j$
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -806,13 +842,21 @@ In the stage of asynchronous switching,  $i \in \mathcal{P}_{m1},\beta_{i} \text
     \end{equation}
     Where $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}$, $\hat{\mathcal{A}}_{i} = \mathcal{A}_{i}+\mathcal{K}_{j}\mathcal{B}_{2i}$.
 
-    Then when the switched signal satisfies 
+    At the same time the switched signal need to satisfy: 
+%\begin{equation}
+%    \begin{aligned}
+%        \setlength{\arraycolsep}{0.9pt}
+%        \breve{v}_{h}:= \lim_{t \rightarrow +\infty}\inf  v_{h}(t) \textgreater 0
+%    \end{aligned}
+%\end{equation}
+
 \begin{equation}
     \begin{aligned}
         \setlength{\arraycolsep}{0.9pt}
-        \breve{v}_{h}:= \lim_{t \rightarrow +\infty}\inf  v_{h}(t) \textgreater 0
+        \lim_{t\rightarrow \infty}\frac{S_{N_{\sigma+1}}}{h(t)} = 0
     \end{aligned}
 \end{equation}
+%这样用夹逼就可以得到要的条件
 and
 \begin{equation}
     \begin{aligned}
@@ -824,19 +868,18 @@ and
 \end{thm}
 
 \begin{pf}
-    \\
     The complete quadratic L-K functional candidate is established as follows :
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
             &V_{\sigma(t)}(\bold{x}) = \left \langle \left(\mathcal{T}_{\sigma(t)}+\mathcal{K}_{\sigma(t-\tau(t))}\mathcal{B}_{T_{2}\sigma(t)}\right)\bold{x}, \right. \\
-            & \quad \quad \quad \quad \quad \quad \quad\left.\quad \mathcal{H}\left(\mathcal{A}_{\sigma(t)}+\mathcal{K}_{\sigma(t-\tau(t))}\mathcal{B}_{T_{2}\sigma(t)}\right)\bold{x} \right \rangle_{Z}
+            & \quad \quad \quad \quad \quad \quad \quad\left.\quad \mathcal{H}\left(\mathcal{A}_{\sigma(t)}+\mathcal{K}_{\sigma(t-\tau(t))}\mathcal{B}_{2\sigma(t)}\right)\bold{x} \right \rangle_{Z}
         \end{aligned}
     \end{equation}
 
-    Condition 1: 
+    %Case 1(normal operation state): 
 
-    Considering the stage of stable normal operation $i \in \mathcal{P}_{m2}^{s},\alpha_{i} \textgreater0$, and the stage of unstable Normal operation $i \in \mathcal{P}_{m2}^{u},\alpha_{i} \textless0$. 
+    (i) Considering normal operation state $\sigma(t) = i$,when $ i\in \mathcal{P}_{m2}^{s},\alpha_{i} \textgreater0$ and $i \in \mathcal{P}_{m2}^{u},\alpha_{i} \textless0$. 
 
     Let $\tilde{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{i}\mathcal{B}_{T_{2}i}$, $\tilde{\mathcal{A}}_{i} = \mathcal{A}_{i}+\mathcal{K}_{i}\mathcal{B}_{2i}$, then
 \begin{equation}
@@ -862,9 +905,9 @@ and
 \end{equation}
 
 
-Condition 2: 
+%Case 2 (asynchronous switching state): 
 
-Considering in the stage of Asynchronous switching $i \in \mathcal{P}_{m1},\beta_{i} \textgreater 0$. For any $j\in\mathcal{P}_{m2},i \ne j$. 
+(ii) Considering Asynchronous switching stage $\sigma(t) = i$ and $\sigma(t-\tau(t)) = j$,where $i \in \mathcal{P}_{m1},\beta_{i} \textgreater 0$ and for any $j\in\mathcal{P}_{m2},i \ne j$. 
 
 Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}$, $\hat{\mathcal{A}}_{i} = \mathcal{A}_{i}+\mathcal{K}_{j}\mathcal{B}_{2i}$, then
 
@@ -894,14 +937,14 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
     %when $j \in \mathcal{P}_{m2}^{s}$,$\alpha_{r,j}=-\alpha_{j}r$,$\alpha_{h,j}=-\alpha_{j}h$;
     %when $j \in \mathcal{P}_{m2}^{u}$,$\alpha_{r,j}=\alpha_{h,j} = 0$.
 
-    Combining the above two situations,we have
+    Combining the above two conditions,we have
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            \dot{V}_{\sigma(t)}(x(t)) \leq \left\{
+            \dot{V}_{\sigma(t)}(\bold{x}(t)) \leq \left\{
                 \begin{array}{rcl}
-                -\alpha_{\sigma(t)}V_{\sigma(t)}(x(t))       &      & {t \in [t_{k}+\tau(t_{k}),t_{k+1})}\\
-                \beta_{\sigma(t)}V_{\sigma(t)}(x(t))     &      & {t \in [t_{k},t_{k}+\tau(t_{k}))}
+                -\alpha_{\sigma(t)}V_{\sigma(t)}(\bold{x}(t))       &      & {t \in [t_{k}+\tau(t_{k}),t_{k+1})}\\
+                \beta_{\sigma(t)}V_{\sigma(t)}(\bold{x}(t))     &      & {t \in [t_{k},t_{k}+\tau(t_{k}))}
                 \end{array}
             \right.
         \end{aligned}
@@ -913,29 +956,30 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            V_{\sigma(t)}(x(t)) &\leq \bold{exp} \left( -\alpha_{\sigma(T_{N_{\sigma}})} \right) V_{\sigma(T_{N_{\sigma}})}(x(T_{N_{\sigma}}))\\
+            V_{\sigma(t)}(\bold{x}(t)) &\leq \bold{exp} \left( -\alpha_{\sigma(T_{N_{\sigma}})} \right) V_{\sigma(T_{N_{\sigma}})}(\bold{x}(T_{N_{\sigma}}))\\
         \end{aligned}
     \end{equation}
 
-    Using the left continuity of Lyapunov function $V_{\sigma(t)}(\bold{x}(t^{-})) = V_{\sigma(t)}(\bold{x}(t))$
+    Using the left continuity of Lyapunov function 
+    %$V_{\sigma(t)}(\bold{x}(t^{-})) = V_{\sigma(t)}(\bold{x}(t))$
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            V_{\sigma(t)}(x(t)) &\leq \bold{exp} \left[ -\alpha_{\sigma(T_{N_{\sigma}})}(t-T_{N_{\sigma}})\right.\\
-            & \left. \quad \quad \quad \quad \quad+\beta_{\sigma(t_{N_{\sigma}})}\tau(t_{N_{\sigma}})\right]V_{\sigma(t_{N_{\sigma}})}(x(t_{N_{\sigma}}))
+            V_{\sigma(t)}(\bold{x}(t)) &\leq \bold{exp} \left[ -\alpha_{\sigma(T_{N_{\sigma}})}(t-T_{N_{\sigma}})\right.\\
+            & \left. \quad \quad \quad \quad \quad+\beta_{\sigma(t_{N_{\sigma}})}\tau(t_{N_{\sigma}})\right]V_{\sigma(t_{N_{\sigma}})}(\bold{x}(t_{N_{\sigma}}))
         \end{aligned}
     \end{equation}
 
     %利用左连续跨越时滞，利用假设跨越两个子系统
 
-    Then by (Assum 1) iterating the above equation, we obtain
+    Iterating the above equations yields 
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            V_{\sigma(t)}(x(t)) &\leq \bold{exp}\left(\Phi(t))V_{\sigma(0)}(x(0)\right)
+            V_{\sigma(t)}(\bold{x}(t)) &\leq \bold{exp}\left(\Phi(t))V_{\sigma(0)}(\bold{x}(0)\right)
         \end{aligned}
     \end{equation}
-    in which
+    In which
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -948,40 +992,79 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            \sum_{k = 0}^{N_{\sigma}-1}\ln \mu_{\sigma(t_{k})\sigma(t_{k+1})} = \sum_{m \in \mathcal{P}}\sum_{k = 0}^{N_{\sigma}-1}\sum_{m \rightarrow n}\ln \mu_{mn}\\
-            =N_{\sigma}\sum_{(m,n)\in E(\mathcal{P})}\ln \mu_{mn} \frac{\#\{m \rightarrow n\}_{t}}{N_{\sigma}}
+            &\sum_{k = 0}^{N_{\sigma}-1}\ln \mu_{\sigma(t_{k})\sigma(t_{k+1})} \\%\sum_{m \in \mathcal{P}}\sum_{k = 0}^{N_{\sigma}-1}\sum_{m \rightarrow n}\ln \mu_{mn}\\
+            &\quad \quad \quad \quad \quad =N_{\sigma}\sum_{(m,n)\in E(\mathcal{P})}\ln \mu_{mn} \frac{\#\{m \rightarrow n\}_{t}}{N_{\sigma}}
         \end{aligned}
     \end{equation}
-    Hence
+    %Hence%换个表达In consequence
+    In consequence
+    %\begin{equation}
+    %    \begin{aligned}
+    %        \setlength{\arraycolsep}{0.9pt}
+    %        &\sum_{k=0}^{N_{\sigma}-1}\alpha_{\sigma(T_{k})}(t_{k+1}-T_{k}) \\
+    %        &= \sum_{k=0}^{N_{\sigma}-1}\alpha_{\sigma(T_{k})}S_{k+1} \\
+    %        & = \sum_{k=0}^{N_{\sigma}-1}\left(\sum_{i \in \mathcal{P}}1_{(i)}(\sigma(T_{k}))\alpha_{i}S_{k+1}\right)\\
+    %        & = -\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} \\
+    %        &   \qquad \qquad \qquad \quad+ \sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} 
+    %    \end{aligned}
+    %end{equation}
+    
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            \sum_{k=0}^{N_{\sigma}-1}\alpha_{\sigma(T_{k})}(t_{k+1}-T_{k}) &= \sum_{k=0}^{N_{\sigma}-1}\alpha_{\sigma(T_{k})}S_{k+1} \\
-            & = \sum_{k=0}^{N_{\sigma}-1}\left(\sum_{i \in \mathcal{P}}1_{(i)}(\sigma(T_{k}))\alpha_{i}S_{k+1}\right)\\
-            & = -\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} \\
-            &  \qquad \quad+ \sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} 
+            & \sum_{k=0}^{N_{\sigma}-1}\alpha_{\sigma(T_{k})}(t_{k+1}-T_{k})\\
+            &= \sum_{i \in \mathcal{P}}\alpha_{i}\sum_{k:\sigma(T_{k}) = i}S_{k+1}\\
+            &= -\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} + \sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}S_{k+1} 
         \end{aligned}
     \end{equation}
+    Where $k:\sigma(T_{k}) = i$ denotes the set of values for $k$ such that $\sigma(T_{k}) = i$.
+
     
-    
+    %\begin{equation}
+    %    \begin{aligned}
+    %        \setlength{\arraycolsep}{0.9pt}
+    %        \phi(t) &=& h(t)\left(\frac{N_{\sigma}}{h(t)}\sum_{(m,n) \in E(\mathcal{P})}\ln\mu_{mn}\frac{\# \{m \rightarrow n\}}{N_{\sigma}} \right.\\
+    %        & &+ \sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
+    %        & &-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
+    %        & &-\alpha_{\sigma(T_{N_{\sigma}})} \frac{(t-T_{N_{\sigma}})}{h(t)}\\
+    %        & &\left.+\sum_{k=0}^{N_{\sigma}-1}\beta_{\sigma(t_{k})}\frac{\tau_{t_{k}}}{h(t)}\right)
+    %    \end{aligned}
+    %\end{equation}
+    By substituting equations (1) and (2) into equation (3), we arrive at the following expression: 
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            \phi(t) &=& h(t)\left(\frac{N_{\sigma}}{h(t)}\sum_{(m,n) \in E(\mathcal{P})}\ln\mu_{mn}\frac{\# \{m \rightarrow n\}}{N_{\sigma}} \right.\\
-            & &+ \sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
-            & &-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
-            & &-\alpha_{\sigma(T_{N_{\sigma}})} \frac{(t-T_{N_{\sigma}})}{h(t)}\\
-            & &\left.+\sum_{k=0}^{N_{\sigma}-1}\beta_{\sigma(t_{k})}\frac{\tau_{t_{k}}}{h(t)}\right)
+            &\phi(t)
+            = h(t)\left(\frac{N_{\sigma}}{h(t)}\sum_{(m,n) \in E(\mathcal{P})}\ln\mu_{mn}\frac{\# \{m \rightarrow n\}}{N_{\sigma}} \right.\\
+            &+ \sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
+            &-\alpha_{\sigma(T_{N_{\sigma}})} \frac{(t-T_{N_{\sigma}})}{h(t)}\left.+\sum_{k=0}^{N_{\sigma}-1}\beta_{\sigma(t_{k})}\frac{\tau_{t_{k}}}{h(t)}\right)
         \end{aligned}
     \end{equation}
-    
+    We define 
+    \begin{equation}
+        \begin{aligned}
+            \setlength{\arraycolsep}{0.9pt}
+            f(t) = \sum_{(m,n) \in E(\mathcal{P})}\ln\mu_{mn}\frac{\# \{m \rightarrow n\}}{N_{\sigma}}
+        \end{aligned}
+    \end{equation}
+    and
+    \begin{equation}
+        \begin{aligned}
+            \setlength{\arraycolsep}{0.9pt}
+            g(t) &= \sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
+            &-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\sum_{k:\sigma(T_{k})=i}\frac{S_{k+1}}{h(t)}\\
+            &-\alpha_{\sigma(T_{N_{\sigma}})} \frac{(t-T_{N_{\sigma}})}{h(t)}+\sum_{k=0}^{N_{\sigma}-1}\beta_{\sigma(t_{k})}\frac{\tau_{t_{k}}}{h(t)}
+        \end{aligned}
+    \end{equation}
+
+    To ensure the global asymptotic convergence property of the switching system under consideration, it suffices to demonstrate that
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
             \lim_{t \rightarrow \infty}\bold{exp}\{h(t)(v_{h}(t)f(t)+g(t)) \} = 0
         \end{aligned}
     \end{equation}
-    
+    We already known $\lim_{t \rightarrow \infty}h(t)=+\infty$,therefore the equation (shangshi) is valid if the following equation holds 
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -989,21 +1072,59 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
         \end{aligned}
     \end{equation}
     
+%    \begin{equation}
+%        \begin{aligned}
+%            \setlength{\arraycolsep}{0.9pt}
+%           \lim_{t \rightarrow \infty}\bold{sup}\;f(t) \le \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\lim_{t \rightarrow \infty}\bold{sup}\;\rho_{mn}(t)
+%       \end{aligned}
+%    \end{equation}
+It is evident that,
+\begin{equation}
+    \begin{aligned}
+        &\limsup_{t \rightarrow \infty}(v_{h}(t)f(t)+g(t)) \le \\
+        &\quad \quad \quad \quad \quad \quad\limsup_{t \rightarrow \infty}v_{h}(t)\limsup_{t \rightarrow \infty}f(t) +\limsup_{t \rightarrow \infty}g(t)
+    \end{aligned}
+\end{equation}
+By combining equations (1) and (2), we obtain
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            \lim_{t \rightarrow \infty}\bold{sup}\;f(t) \le \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\lim_{t \rightarrow \infty}\bold{sup}\;\rho_{mn}(t)
+            \limsup_{t \rightarrow \infty}f(t) \le \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\limsup_{t \rightarrow \infty}\;\rho_{mn}(t)
         \end{aligned}
     \end{equation}
     
-    \begin{equation}
-        \begin{aligned}
-            \setlength{\arraycolsep}{0.9pt}
-            \lim_{t \rightarrow \infty}\bold{sup}\;g(t) = \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\lim_{t \rightarrow \infty}\bold{sup}\;\rho_{mn}(t)
-        \end{aligned}
-    \end{equation}
+
+
+%    \begin{equation}
+%        \begin{aligned}
+%            \setlength{\arraycolsep}{0.9pt}
+%            \lim_{t \rightarrow \infty}\bold{sup}\;g(t) = \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\lim_{t \rightarrow \infty}\bold{sup}\;\rho_{mn}(t)
+%        \end{aligned}
+%    \end{equation}
+    %\begin{equation}
+    %    \begin{aligned}
+    %        \setlength{\arraycolsep}{0.9pt}
+    %        \limsup_{t \rightarrow \infty}g(t) = \sum_{(m,n) \in E(\mathcal{P})} \ln\mu_{mn}\limsup_{t \rightarrow \infty}\;\rho_{mn}(t)
+    %   \end{aligned}
+    %end{equation}
     
-    
+    %When $t \rightarrow \infty$,we know that $\frac{t-T_{N_{\sigma}}}{h(t)} \rightarrow 0$.Hence,
+    It is easy to see
+\begin{equation}
+    \begin{aligned}
+        \setlength{\arraycolsep}{0.9pt}
+        0\le\lim_{t \rightarrow\infty}\frac{t-T_{N_{\sigma}}}{h(t)} \le \lim_{t \rightarrow\infty}\frac{S_{N_{\sigma}+1}}{h(t)}
+    \end{aligned}
+\end{equation}
+
+By applying the Squeeze Theorem to equation (34) and equation (57), we can obtain that
+\begin{equation}
+    \begin{aligned}
+        \setlength{\arraycolsep}{0.9pt}
+        \lim_{t \rightarrow\infty}\frac{t-T_{N_{\sigma}}}{h(t)} = 0    
+    \end{aligned}
+\end{equation}
+Therefore
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -1011,7 +1132,7 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
             & \left.\quad-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\eta_{2}^{h}(i,t)+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\eta_{1}^{h}(i,t)\right)
         \end{aligned}
     \end{equation}
-    
+    Then
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -1020,7 +1141,7 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
             & \quad+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\lim_{t \rightarrow \infty}\bold{sup}\;\eta_{1}^{h}(i,t)
         \end{aligned}
     \end{equation}
-    
+    It is clear that the sufficient condition for (54) to hold is:%暂定 
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
@@ -1029,11 +1150,11 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
             &+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\lim_{t \rightarrow \infty}\bold{inf}\;\eta_{1}^{h}(i,t) \textless 0
         \end{aligned}
     \end{equation}
-    
+    Finally,
     \begin{equation}
         \begin{aligned}
             \setlength{\arraycolsep}{0.9pt}
-            V_{\sigma(t)}(x(t)) \le \bold{exp}(\phi(t))V_{\sigma(0)}(x(0))
+            V_{\sigma(t)}(\bold{x}(t)) \le \bold{exp}(\phi(t))V_{\sigma(0)}(\bold{x}(0))
         \end{aligned}
     \end{equation}
 \end{pf}
@@ -1043,7 +1164,8 @@ Let $\hat{\mathcal{T}}_{i} = \mathcal{T}_{i}+\mathcal{K}_{j}\mathcal{B}_{T_{2}i}
 \end{rmk}
 
 \begin{rmk}
-    Due to the use of left continuity for the Lyapunov function, the coupling of two judgment conditions is implicitly involved.
+    Although the design of $\mathcal{K}$ is theoretically possible, due to the inability to multiply two decision variables(dpivar) in PIE2022a, 
+    the controller have to be replaced with a known controller in subsequent simulations.    %解放方案大概可以有不采用简单的状态反馈使得出的闭环系统稳定性判据中只存在决策变量加和的形式
 \end{rmk}
 
 \begin{rmk}
@@ -1109,61 +1231,78 @@ where
         \nonumber
     \end{equation}
     
-    \begin{center}
-        \begin{tikzpicture}
-            [node distance=.4cm,
-            start chain=going below,]
-               \node[punktchain, join] (intro) {Introduktion};
-               \node[punktchain, join] (probf)      {Problemformulering};
-               \node[punktchain, join] (investeringer)      {Investeringsteori};
-               \node[punktchain, join] (perfekt) {Det perfekte kapitalmarked};
-               \node[punktchain, join, ] (emperi) {Emperi};
-                \node (asym) [punktchain ]  {Asymmetrisk information};
-            \node[punktchain, join,] (disk) {Det imperfekte finansielle marked};
-            \node[punktchain, join,] (makro) {InvesteringsmÃ¦ssige konsekvenser};
-            \node[punktchain, join] (konk) {Konklusion};
-            \end{tikzpicture}
-    \end{center}
+    % \begin{center}
+    %     \begin{tikzpicture}
+    %         [node distance=.4cm,
+    %         start chain=going below,]
+    %            \node[punktchain, join] (intro) {Introduktion};
+    %            \node[punktchain, join] (probf)      {Problemformulering};
+    %            \node[punktchain, join] (investeringer)      {Investeringsteori};
+    %            \node[punktchain, join] (perfekt) {Det perfekte kapitalmarked};
+    %            \node[punktchain, join, ] (emperi) {Emperi};
+    %             \node (asym) [punktchain ]  {Asymmetrisk information};
+    %         \node[punktchain, join,] (disk) {Det imperfekte finansielle marked};
+    %         \node[punktchain, join,] (makro) {InvesteringsmÃ¦ssige konsekvenser};
+    %         \node[punktchain, join] (konk) {Konklusion};
+    %         \end{tikzpicture}
+    % \end{center}
 
-    \begin{table}[!h]
-        \centering
-        \caption{DELAY BOUND $\tau_{max}$ FOR $c = 0.5$}\label{tab1}
-        \begin{tabular}{{l l|l l}}
-        \toprule
-        $\tau_{max}^{YueHan}$ & 3.69 & $\tau_{max}^{Fridman}$ & 1.14  \\
-        \midrule
-        $\tau_{max}^{He}$ & 3.67 &  $\tau_{max}$ & 4.7274 \\
-        \hline
-        $\tau_{max}^{Han}$ & 3.62 & $\tau_{max}^{analytical}$ & 4.7388  \\
-        \bottomrule
-        \end{tabular}
-    \end{table}
-    
     \begin{table}[!h]
         \centering
         \caption{DELAY BOUND $\tau_{max}$ FOR VARIOUS c}\label{tab1}
-        \begin{tabular}{{l l|l l}}
+        \begin{tabular}{{l l}}
         \toprule
-        $\tau_{max}^{YueHan}$ & 3.69 & $\tau_{max}^{Fridman}$ & 1.14  \\
+        & Delay Bound \\
         \midrule
-        $\tau_{max}^{He}$ & 3.67 &  $\tau_{max}$ & 4.7274 \\
-        \hline
-        $\tau_{max}^{Han}$ & 3.62 & $\tau_{max}^{analytical}$ & 4.7388  \\
+        $\tau_{max}^{YueHan}$ & 3.69 \\
+        $\tau_{max}^{Fridman}$ & 1.14 \\
+        $\tau_{max}^{He}$ & 3.67 \\
+        $\tau_{max}^{Han}$ & 3.62 \\
+        $\tau_{max}$ & 4.7274 \\
+        $\tau_{max}^{analytical}$ & 4.7388 \\
         \bottomrule
         \end{tabular}
     \end{table}
+
+    % \begin{table}[!h]
+    %     \centering
+    %     \caption{DELAY BOUND $\tau_{max}$ FOR $c = 0.5$}\label{tab1}
+    %     \begin{tabular}{{l l|l l}}
+    %     \toprule
+    %     $\tau_{max}^{YueHan}$ & 3.69 & $\tau_{max}^{Fridman}$ & 1.14  \\
+    %     \midrule
+    %     $\tau_{max}^{He}$ & 3.67 &  $\tau_{max}$ & 4.7274 \\
+    %     \hline
+    %     $\tau_{max}^{Han}$ & 3.62 & $\tau_{max}^{analytical}$ & 4.7388  \\
+    %     \bottomrule
+    %     \end{tabular}
+    % \end{table}
+    
+    % \begin{table}[!h]
+    %     \centering
+    %     \caption{DELAY BOUND $\tau_{max}$ FOR VARIOUS c}\label{tab1}
+    %     \begin{tabular}{{l l|l l}}
+    %     \toprule
+    %     $\tau_{max}^{YueHan}$ & 3.69 & $\tau_{max}^{Fridman}$ & 1.14  \\
+    %     \midrule
+    %     $\tau_{max}^{He}$ & 3.67 &  $\tau_{max}$ & 4.7274 \\
+    %     \hline
+    %     $\tau_{max}^{Han}$ & 3.62 & $\tau_{max}^{analytical}$ & 4.7388  \\
+    %     \bottomrule
+    %     \end{tabular}
+    % \end{table}
 \end{exmp}
 
 \begin{exmp}
-    Consider a neutral system(xia)
+    Consider a switching neutral system(xia)
     \begin{equation}
         \begin{aligned}
             \begin{bmatrix}
                 \dot{x}(t) \\
                 z(t) \\
                 y(t) 
-            \end{bmatrix} & = \begin{bmatrix}
-                A_{0} & 0 & 0\\
+            \end{bmatrix} &=\begin{bmatrix}
+                A_{\sigma(t)} & 0 & D_{\sigma(t)}\\
                 0 & 0 & 0\\
                 0 & 0 & 0
             \end{bmatrix}\begin{bmatrix}
@@ -1172,31 +1311,74 @@ where
                 u(t) 
             \end{bmatrix} \\ 
             &+ \quad \begin{bmatrix}
-                A_{1} & 0 &0 & E_{1}\\
+                B_{\sigma(t)} & 0 & 0 & 0\\
                 0 & 0 & 0 & 0\\
                 0 & 0 & 0 & 0
             \end{bmatrix} \begin{bmatrix}
-                x(t-\tau_{1}) \\
-                w(t-\tau_{1}) \\
-                u(t-\tau_{1}) \\
-                \dot{x}(t-\tau_{1})
-            \end{bmatrix}.\label{eq}
+                x(t-r) \\
+                w(t-r) \\
+                u(t-r) \\
+                \dot{x}(t-r)
+            \end{bmatrix} \\
+            &+ \qquad \begin{bmatrix}
+                0 & 0 & 0 & C_{\sigma(t)}\\
+                0 & 0 & 0 & 0\\
+                0 & 0 & 0 & 0
+            \end{bmatrix} \begin{bmatrix}
+                x(t-h) \\
+                w(t-h) \\
+                u(t-h) \\
+                \dot{x}(t-h)
+            \end{bmatrix}
         \end{aligned}
     \end{equation}
+%    \begin{equation}
+%        \begin{aligned}
+%            \begin{bmatrix}
+%                \dot{x}(t) \\
+%                z(t) \\
+%                y(t) 
+%            \end{bmatrix} & = \begin{bmatrix}
+%                A_{0} & 0 & 0\\
+%                0 & 0 & 0\\
+%                0 & 0 & 0
+%            \end{bmatrix}\begin{bmatrix}
+%               x(t) \\
+%               w(t) \\
+%                u(t) 
+%            \end{bmatrix} \\ 
+%            &+ \quad \begin{bmatrix}
+%               A_{1} & 0 &0 & E_{1}\\
+%               0 & 0 & 0 & 0\\
+%               0 & 0 & 0 & 0
+%            \end{bmatrix} \begin{bmatrix}
+%                x(t-\tau_{1}) \\
+%                w(t-\tau_{1}) \\
+%                u(t-\tau_{1}) \\
+%               \dot{x}(t-\tau_{1})
+%            \end{bmatrix}.\label{eq}
+%        \end{aligned}
+%    \end{equation}
+    Let the two subsystems that constitue the switching neutral system be:
+
     Subsystem 1:
     \begin{equation}
         \begin{aligned}
-            &A_{0} =  \begin{bmatrix}
+            &A_{1} =  \begin{bmatrix}
                 1.8 & -0.3\\
                 0 & 2.5\\
             \end{bmatrix}
-            &A_{1} =  \begin{bmatrix}
-                -1 & 0\\
-                -1 & -1
+            &B_{1} =  \begin{bmatrix}
+                -0.8 & 0\\
+                0.5 & -0.2
             \end{bmatrix}\\
-            &E_{1} =  \begin{bmatrix}
-                0.5 & \quad 0\\
-                0 & \quad 0.5\\
+            &C_{1} =  \begin{bmatrix}
+                -0.2 & \quad 0.5\\
+                0.2 & \quad 0.7\\
+            \end{bmatrix}
+            &D_{1} =  \begin{bmatrix}
+                1 & \quad 0\\
+                0 & \quad 1\\
             \end{bmatrix}\\
         \end{aligned}
         \nonumber
@@ -1204,101 +1386,204 @@ where
     Subsystem 2:
     \begin{equation}
         \begin{aligned}
-            &A_{0} =  \begin{bmatrix}
-                1.8 & -0.3\\
-                0 & 2.5\\
+            &A_{2} =  \begin{bmatrix}
+                0.2 & 0\\
+                0 & 1.5\\
             \end{bmatrix}
-            &A_{1} =  \begin{bmatrix}
-                -1 & 0\\
-                -1 & -1
+            &B_{2} =  \begin{bmatrix}
+                0.3 & 0\\
+                -0.2 & -0.6
             \end{bmatrix}\\
-            &E_{1} =  \begin{bmatrix}
-                0.5 & \quad 0\\
-                0 & \quad 0.5\\
+            &C_{2} =  \begin{bmatrix}
+                0.15 & \quad 0\\
+                -0.15 & \quad 0.8\\
+            \end{bmatrix}
+            &D_{2} =  \begin{bmatrix}
+                0 & \quad 0\\
+                1 & \quad 1\\
             \end{bmatrix}\\
         \end{aligned}
         \nonumber
     \end{equation}
     
-$\tau(t)$,$r$,$h$,$\alpha_{1}$,$\alpha_{2}$,$\beta_{1}$,$\beta_{2}$
+Given controller $K_{1},K_{2}$: 
 \begin{equation}
     \begin{aligned}
         &K_{1} =  \begin{bmatrix}
-            1.8 & -0.3\\
-            0 & 2.5\\
-        \end{bmatrix}
+            -34.1248 & 18.4433\\
+            -810.7437 & -547.4460\\
+        \end{bmatrix}\\
         &K_{2} =  \begin{bmatrix}
-            -1 & 0\\
-            -1 & -1
+            -34.1862 & 18.4852\\
+            810.8345 & -547.4942
         \end{bmatrix}
     \end{aligned}
     \nonumber
 \end{equation}
-Let h(t) = t
+% we let $\tau(t)$,$r$,$h$,$\alpha_{1}=1$,$\alpha_{2}=-2$,$\beta_{1}=2$,$\beta_{2}=2$
+In addition, we let h(t) = t, 
+$N_{t}^{\sigma} = 0.3t+t^{\frac{1}{3}}$, 
+$\eta^{h}_{1}(1,t) = \eta^{h}_{1}(2,t) = \frac{1}{2}(0.02+t^{-\frac{2}{3}})$, 
+$\eta^{h}_{2}(1,t) = 0.855-t^{-\frac{1}{3}}$, 
+$\eta^{h}_{2}(2,t) = 0.125+t^{-\frac{1}{3}}-t^{-\frac{2}{3}}$, and  
+$\rho_{mn} = \frac{1}{2}$, for $(m,n) \in E(\mathcal{P})$.
+
+Set the simulation time to 30 seconds, we have $N_{t}^{\sigma} = 12$, 
+$\eta^{h}_{1}(1,t) = \eta^{h}_{1}(2,t) = 0.062$, 
+$\eta^{h}_{2}(1,t) = 0.533$, 
+$\eta^{h}_{2}(2,t) = 0.343$, 
+$\rho_{mn} = \frac{1}{2}$.
+Moreover, we give the asymptotic upper densities  
+$\hat{\eta}^{h}_{1}(1) = \hat{\eta}^{h}_{1}(2) = 0.01$, 
+$\hat{\eta}^{h}_{2}(2) = 0.125$, 
+$\hat{v}_{h}=0.3$, $\hat{\rho}_{mn}=\frac{1}{2}$ and the asymptotic lower densities 
+$\breve{\eta}^{h}_{2}(1) = 0.855$.
+
+Considering the given conditions, we acquire two switching signals $\sigma(t)$ that satisfy $\tau=0.308$ and $\tau=2.0$ shown in Fig.2 and Fig.3.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{tau0.308.jpg}
+    \caption{$\sigma(t)$ with $\tau=0.308$}
+    \end{figure} 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{alpha_half_tau2.jpg}
+    \caption{$\sigma(t)$ with $\tau=2.0$}
+    \end{figure} 
+
+The subsequent simulations will be divided into two parts:
+
+(1) We set the switching delay $\tau$ to $0.308$ and give two groups of parameters $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2;\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1$ to show effectiveness and the low conservativeness of Theorem 3.2 by comparing with the stability criteria proposed by Liu[].
+
+(2) While keeping the conditions of $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2;\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1$ unchanged, we will increase the switching delay $\tau$ to $2.0$ to show the show effectiveness and the low conservativeness under a larger $\tau$.
+
+In the first part, $x(t)$ with $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2,\tau=0.308$ is shown in Fig.4
+
+$x(t)$ with $\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1,\tau=0.308$ is shown in Fig.5
+
+The condition (bianhao) can be verified, through calculations: 
+
+
+% \begin{equation}
+%     \begin{aligned}
+%         &\hat{v}_{h}\sum_{(m,n) \in E(\mathcal{P})}\ln\mu_{mn}+\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\hat{\eta}^{h}_{2}^{h}(i,t)\\
+%         &-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\hat{\eta}^{h}_{2}^{h}(i,t)+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\breve{\eta}^{h}_{2}^{h}(i,t) \textless 0
+%     \end{aligned}
+% \end{equation}
+When $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2$
 \begin{equation}
     \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        N_{t}^{\sigma}
+        &\hat{v}_{h}\sum_{(m,n) \in E(\mathcal{P})}\hat{\rho}_{mn}\ln\mu_{mn}+ \left(\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\hat{\eta}^{h}_{2}(i,t)\right.\\
+        &\left.-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\breve{\eta}^{h}_{2}(i,t)+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\hat{\eta}^{h}_{1}(i,t) \right)\\
+        &=-0.3571 \textless 0
     \end{aligned}
-    \nonumber
 \end{equation}
 
+When $\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1$
 \begin{equation}
     \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \eta^{h}_{1}(1,t) = \eta^{h}_{1}(2,t) 
+        &\hat{v}_{h}\sum_{(m,n) \in E(\mathcal{P})}\hat{\rho}_{mn}\ln\mu_{mn}+ \left(\sum_{i \in \mathcal{P}_{m2}^{u}}\left|\alpha_{i}\right|\hat{\eta}^{h}_{2}(i,t)\right.\\
+        &\left.-\sum_{i \in \mathcal{P}_{m2}^{s}}\left|\alpha_{i}\right|\breve{\eta}^{h}_{2}(i,t)+\sum_{i \in \mathcal{P}}\left|\beta_{i}\right|\hat{\eta}^{h}_{1}(i,t) \right)\\
+        &=-0.0746 \textless 0
     \end{aligned}
-    \nonumber
 \end{equation}
 
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \eta^{h}_{2}(1,t) 
-    \end{aligned}
-    \nonumber
-\end{equation}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{alpha-2tau0.308.jpg}
+    \caption{$x(t)$ with $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2,\tau=0.308$}
+    \end{figure} 
+    
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{alpha_half_tau0.3_state.jpg}
+    \caption{$x(t)$ with $\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1,\tau=0.308$}
+    \end{figure} 
 
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \eta^{h}_{2}(2,t) 
-    \end{aligned}
-    \nonumber
-\end{equation}
+    DELAY BOUND $T_{max}$ $\alpha_{1}=1,\alpha_{2}=-2,\beta_{1}=\beta_{2}=2$ is shown in Table 2
 
+    \begin{table}[!h]
+        \centering
+        \caption{DELAY BOUND $T_{max}$ $\alpha_{1}=1,\alpha_{2}=-2,\beta_{1}=\beta_{2}=2$}\label{tab1}
+        \begin{tabular}{{l l l l}}
+        \toprule
+        & $\tau$ & $r_{max}$ & $h_{max}$\\
+        \midrule
+        $T_{max}^{Liu}$ & 0.308 & 0.461 & 0.4461\\
+        $T_{max}$ & 0.308 & 0.47878 & 0.60665 \\
+    %    $\tau_{max}^{Liu}$ & 2.00 & 0.461 & 0.4461\\
+    %    $\tau_{max}$ & 2.00 & 0.47878 & 0.60665 \\
+        \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \begin{table}[!h]
+        \centering
+        \caption{DELAY BOUND $T_{max}$ $\alpha_{1}=0.5,\alpha_{2}=-1,\beta_{1}=\beta_{2}=1$}\label{tab1}
+        \begin{tabular}{{l l l l}}
+        \toprule
+        & $\tau$ & $r_{max}$ & $h_{max}$\\
+        \midrule
+        $T_{max}^{Liu}$ & 0.308 & 0.8510 & 0.8000\\
+        $T_{max}$ & 0.308 & 0.8750 & 0.8777 \\
+    %    $\tau_{max}^{Liu}$ & 2.00 & 0.461 & 0.4461\\
+    %    $\tau_{max}$ & 2.00 & 0.47878 & 0.60665 \\
+        \bottomrule
+        \end{tabular}
+    \end{table}
+
+
+
+%做点总结
+In the second part, 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{tau2alpha-2.jpg}
+    \caption{$x(t)$ with $\alpha_{1} = 1,\alpha_{2} = -2,\beta_{1} = \beta_{2} =2,\tau=2.0$}
+    \end{figure} 
+    
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.49\textwidth,height=0.245\textwidth]{alpha_half_tau2_state.jpg}
+    \caption{$x(t)$ with $\alpha_{1} = 0.5,\alpha_{2} = -1,\beta_{1} = \beta_{2} =1,\tau=2.0$}
+    \end{figure} 
+
+
+    
 \end{exmp}
 
 
 \section{Conclusion}
-cite Delay-Dependent Stability for Load FrequencyControl System via Linear Operator Inequality 
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}' \textless 0
-    \end{aligned}
-\end{equation}
-$\bold{PROOF:}$ 
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \dot{V}(\bold{x}) &= <\mathcal{T}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} + <\mathcal{A}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} \\ &=<\bold{x},(\mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}')\bold{x}>_{Z}  
-    \end{aligned}
-\end{equation}
-\section{References}
-cite Delay-Dependent Stability for Load FrequencyControl System via Linear Operator Inequality 
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}' \textless 0
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-        \setlength{\arraycolsep}{0.9pt}
-        \dot{V}(\bold{x}) &= <\mathcal{T}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} + <\mathcal{A}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} \\ &=<\bold{x},(\mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}')\bold{x}>_{Z}  
-    \end{aligned}
-\end{equation}
+% cite Delay-Dependent Stability for Load FrequencyControl System via Linear Operator Inequality 
+% \begin{equation}
+%     \begin{aligned}
+%         \setlength{\arraycolsep}{0.9pt}
+%         \mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}' \textless 0
+%     \end{aligned}
+% \end{equation}
+% $\bold{PROOF:}$ 
+% \begin{equation}
+%     \begin{aligned}
+%         \setlength{\arraycolsep}{0.9pt}
+%         \dot{V}(\bold{x}) &= <\mathcal{T}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} + <\mathcal{A}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} \\ &=<\bold{x},(\mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}')\bold{x}>_{Z}  
+%     \end{aligned}
+% \end{equation}
+% \section{References}
+% cite Delay-Dependent Stability for Load FrequencyControl System via Linear Operator Inequality 
+% \begin{equation}
+%     \begin{aligned}
+%         \setlength{\arraycolsep}{0.9pt}
+%         \mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}' \textless 0
+%     \end{aligned}
+% \end{equation}
+% \begin{equation}
+%     \begin{aligned}
+%         \setlength{\arraycolsep}{0.9pt}
+%         \dot{V}(\bold{x}) &= <\mathcal{T}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} + <\mathcal{A}'\bold{x},\mathcal{H}\mathcal{T}'\bold{x}>_{Z} \\ &=<\bold{x},(\mathcal{T}'^{*}\mathcal{H}\mathcal{A}'+\mathcal{A}'^{*}\mathcal{H}\mathcal{T}')\bold{x}>_{Z}  
+%     \end{aligned}
+% \end{equation}
 
 \section{Appendixes}
 

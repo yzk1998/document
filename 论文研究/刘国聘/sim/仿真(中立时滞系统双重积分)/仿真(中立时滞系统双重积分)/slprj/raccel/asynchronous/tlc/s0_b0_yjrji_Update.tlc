@@ -1,0 +1,43 @@
+%implements s0_b0_yjrji_Update "C"
+
+%function Update(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+real_T (*lastU)[2];
+%closefile localVarDecl
+%assign tlcUpdateFcnOfS0B0 = OpaqueTLCBlockFcn("Update", 0, 0, 0, 3, 0)
+%assign tlcUpdateFcnOfS0B2 = OpaqueTLCBlockFcn("Update", 0, 2, 0, 3, 1)
+%assign tlcUpdateFcnOfS0B3 = OpaqueTLCBlockFcn("Update", 0, 3, 0, 3, 2)
+%<tlcUpdateFcnOfS0B0>\
+%<tlcUpdateFcnOfS0B2>\
+if (rtDW.cvllmyuawn == %<LibGetMathConstant(LibRealNonFinite("inf"), FcnGetDataTypeIdFromName("double"))>) {
+    rtDW.cvllmyuawn = %<(SLibCG_SE(LibGetT()))>;
+    lastU = &rtDW.b5ynwg1d03;
+} else if (rtDW.gea1nuybtz == %<LibGetMathConstant(LibRealNonFinite("inf"), FcnGetDataTypeIdFromName("double"))>) {
+    rtDW.gea1nuybtz = %<(SLibCG_SE(LibGetT()))>;
+    lastU = &rtDW.mq503qndxa;
+} else if (rtDW.cvllmyuawn < rtDW.gea1nuybtz) {
+    rtDW.cvllmyuawn = %<(SLibCG_SE(LibGetT()))>;
+    lastU = &rtDW.b5ynwg1d03;
+} else {
+    rtDW.gea1nuybtz = %<(SLibCG_SE(LibGetT()))>;
+    lastU = &rtDW.mq503qndxa;
+}
+(*lastU)[0] = rtB.gol5w2fvki[0];
+(*lastU)[1] = rtB.gol5w2fvki[1];
+%<tlcUpdateFcnOfS0B3>\
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedUpdateLocalVars", localVarDecl)>
+%endfunction
+%function UpdateFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Update0(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 3, fcnProtoType)>
+%endfunction

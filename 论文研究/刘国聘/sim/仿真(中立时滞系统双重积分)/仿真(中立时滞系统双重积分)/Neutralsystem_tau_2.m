@@ -212,12 +212,12 @@ end
 % %%%%%%%%%%%end:switching signal 决定激活系统子系统%%%%%%%%%%%%
 
 
-tau=t-0.3;
+%tau=t-0.3;
 
-%tau=t-2;
+tau=t-2;
 %%%%%%%%%%%%%%%%%%%%begin：具体定义switching signal u%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if(tau>=-0.3 && tau<3)
-%if(tau>=-2 && tau<3)
+%if(tau>=-0.3 && tau<3)
+if(tau>=-2 && tau<3)
     signal_u=2;   %%3
 else
     if(tau>=3&&tau<4)
@@ -579,14 +579,14 @@ G2=0;
 end
 % %%%%%%%%%%%end:switching signal 决定激活系统子系统%%%%%%%%%%%%
 
-tau=t-0.308;
+%tau=t-0.308;
 
-%tau=t-2;
+tau=t-2;
 %%%%%%%%%%%%%%%%%%%%begin：具体定义switching signal u%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-if(tau>=-0.3 && tau<3)
-%if(tau>=-2 && tau<3)    
+%if(tau>=-0.3 && tau<3)
+if(tau>=-2 && tau<3)    
     signal_u=2;   %%3
 else
     if(tau>=3&&tau<4)
